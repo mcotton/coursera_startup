@@ -39,11 +39,8 @@ var assertFileExists = function(infile) {
 };
 
 var fetchURL = function(data) {
-  //console.log('running inside of fetchURL');
-  //console.log(data)
 
   restler.get(data).on('complete', function(results) {
-    //console.log(results)
     finish(results, CHECKSFILE_DEFAULT)
   })
 }
@@ -57,8 +54,8 @@ var loadChecks = function(checksfile) {
     return JSON.parse(fs.readFileSync(checksfile));
 };
 
-var checkHtmlFile = function(htmlfile, checksfile, dammit) {
-    if(dammit) {
+var checkHtmlFile = function(htmlfile, checksfile, afterURLloaded) {
+    if(afterURLloaded) {
       $ = cheerio.load(htmlfile);
     } else { 
       $ = cheerioHtmlFile(htmlfile);
@@ -79,7 +76,7 @@ var clone = function(fn) {
 };
 
 var finish = function(files, checks) {
-  checkJson = checkHtmlFile(files, checks, true);
+  checkJson = checkHtmlFile(files, checks, fromURL);
   var outJson = JSON.stringify(checkJson, null, 4);
   console.log(outJson);
 }
